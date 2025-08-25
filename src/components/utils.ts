@@ -31,6 +31,10 @@ export function formatLength(length: JobPosition["length"]): string {
 //   );
 // }
 
+function isDate(object: unknown): object is Date {
+  return object instanceof Date && !isNaN(object.getTime());
+}
+
 export function sortData(
   data: JobPosition[],
   payload: {
@@ -47,20 +51,24 @@ export function sortData(
   }
 
   return [...data].sort((a, b) => {
-    if (payload.reversed) {
-      return a[sortBy] - b[sortBy];
+    if (isDate(a[sortBy]) && isDate(b[sortBy])) {
+      if (payload.reversed) {
+        return (a[sortBy] as number) - (b[sortBy] as number);
+      }
+
+      return (b[sortBy] as number) - (a[sortBy] as number);
     }
 
-    return b[sortBy] - a[sortBy];
-    // if (payload.reversed) {
-    //   return (b[sortBy]?.toLocaleString() as string).localeCompare(
-    //     a[sortBy]?.toLocaleString() as string,
-    //   );
-    // }
+    // string
+    if (payload.reversed) {
+      return (b[sortBy]?.toLocaleString() as string).localeCompare(
+        a[sortBy]?.toLocaleString() as string,
+      );
+    }
 
-    // return (a[sortBy]?.toLocaleString() as string).localeCompare(
-    //   b[sortBy]?.toLocaleString() as string,
-    // );
+    return (a[sortBy]?.toLocaleString() as string).localeCompare(
+      b[sortBy]?.toLocaleString() as string,
+    );
   });
 
   // return filterData(

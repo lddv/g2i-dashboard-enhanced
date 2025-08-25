@@ -4,8 +4,7 @@ This project was created to showcase the use of filters in the G2i job dashboard
 
 ## Background
 
-- Data from their prod API
-- Took a snapshot of it and placed inside my app.
+- Inspired on data from their prod API, but redacted a few names to preserve privacy.
 
 ## Technologies used
 

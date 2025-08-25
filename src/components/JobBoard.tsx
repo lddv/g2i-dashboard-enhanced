@@ -50,7 +50,13 @@ export function JobBoard() {
         <Table.Thead>
           <Table.Tr>
             <Table.Th>Company - Position</Table.Th>
-            <Table.Th>Category</Table.Th>
+            <TableHeader
+              sorted={sortBy === "category"}
+              reversed={reverseSortDirection}
+              onSort={() => setSorting("category")}
+            >
+              Category
+            </TableHeader>
             <TableHeader
               sorted={sortBy === "publishedAt"}
               reversed={reverseSortDirection}
@@ -63,7 +69,13 @@ export function JobBoard() {
             <Table.Th>Experience</Table.Th>
             <Table.Th>Rate</Table.Th>
             <Table.Th>Length</Table.Th>
-            <Table.Th>Type</Table.Th>
+            <TableHeader
+              sorted={sortBy === "employmentType"}
+              reversed={reverseSortDirection}
+              onSort={() => setSorting("employmentType")}
+            >
+              Type
+            </TableHeader>
             <Table.Th>Status</Table.Th>
           </Table.Tr>
         </Table.Thead>
