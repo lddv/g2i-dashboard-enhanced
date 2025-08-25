@@ -19,6 +19,8 @@ export function JobBoard() {
     setSortedData(sortData(data, { sortBy: field, reversed }));
   };
 
+  const showRateColumn = data.some((job) => job.rate);
+
   const rows = sortedData.map((element) => (
     <Table.Tr key={element.id}>
       <Table.Td>
@@ -31,7 +33,7 @@ export function JobBoard() {
       <Table.Td>{element.location.toString()}</Table.Td>
       <Table.Td>{element.skills.toString()}</Table.Td>
       <Table.Td>{formatExperience(element.experience)}</Table.Td>
-      <Table.Td>{element.rate}</Table.Td>
+      {showRateColumn ? <Table.Td>{element.rate}</Table.Td> : null}
       <Table.Td>{formatLength(element.length)}</Table.Td>
       <Table.Td>{element.employmentType}</Table.Td>
       <Table.Td>{element.applicationStatus}</Table.Td>
@@ -67,7 +69,7 @@ export function JobBoard() {
             <Table.Th>Location</Table.Th>
             <Table.Th>Skills</Table.Th>
             <Table.Th>Experience</Table.Th>
-            <Table.Th>Rate</Table.Th>
+            {showRateColumn ? <Table.Th>Rate</Table.Th> : null}
             <Table.Th>Length</Table.Th>
             <TableHeader
               sorted={sortBy === "employmentType"}
