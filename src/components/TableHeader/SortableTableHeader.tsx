@@ -13,7 +13,12 @@ interface ThProps {
   onSort: () => void;
 }
 
-export function TableHeader({ children, reversed, sorted, onSort }: ThProps) {
+export function SortableTableHeader({
+  children,
+  reversed,
+  sorted,
+  onSort,
+}: ThProps) {
   const Icon = sorted
     ? reversed
       ? IconChevronUp

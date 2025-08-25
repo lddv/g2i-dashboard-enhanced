@@ -5,7 +5,7 @@ import { data, localeDateOptions } from "./constants";
 import { formatExperience, formatLength, sortData } from "./utils";
 import type { JobPosition } from "./types";
 
-import { TableHeader } from "./TableHeader/TableHeader";
+import { SortableTableHeader } from "./TableHeader/SortableTableHeader";
 
 export function JobBoard() {
   const [sortedData, setSortedData] = useState(data);
@@ -52,32 +52,32 @@ export function JobBoard() {
         <Table.Thead>
           <Table.Tr>
             <Table.Th>Company - Position</Table.Th>
-            <TableHeader
+            <SortableTableHeader
               sorted={sortBy === "category"}
               reversed={reverseSortDirection}
               onSort={() => setSorting("category")}
             >
               Category
-            </TableHeader>
-            <TableHeader
+            </SortableTableHeader>
+            <SortableTableHeader
               sorted={sortBy === "publishedAt"}
               reversed={reverseSortDirection}
               onSort={() => setSorting("publishedAt")}
             >
               Published At
-            </TableHeader>
+            </SortableTableHeader>
             <Table.Th>Location</Table.Th>
             <Table.Th>Skills</Table.Th>
             <Table.Th>Experience</Table.Th>
             {showRateColumn ? <Table.Th>Rate</Table.Th> : null}
             <Table.Th>Length</Table.Th>
-            <TableHeader
+            <SortableTableHeader
               sorted={sortBy === "employmentType"}
               reversed={reverseSortDirection}
               onSort={() => setSorting("employmentType")}
             >
               Type
-            </TableHeader>
+            </SortableTableHeader>
             <Table.Th>Status</Table.Th>
           </Table.Tr>
         </Table.Thead>
