@@ -1,176 +1,25 @@
 import { Table } from "@mantine/core";
+import { useState } from "react";
+
+import { data, localeDateOptions } from "./constants";
+import { formatExperience, formatLength, sortData } from "./utils";
 import type { JobPosition } from "./types";
-import { formatExperience, formatLength } from "./utils";
 
-const data: JobPosition[] = [
-  {
-    id: "1",
-    company: "Software House AI",
-    positionName: "Design Frontend Engineer",
-    publishedAt: new Date("2025-03-13"),
-    location: ["US"],
-    skills: ["Frontend Architecture"],
-    experience: [5],
-    employmentType: "fulltime",
-    applicationStatus: "not-applied",
-    category: "frontend",
-  },
-  {
-    id: "2",
-    company: "Software House AI",
-    positionName: "Frontend Engineer",
-    publishedAt: new Date("2025-03-14"),
-    location: ["US", "CA"],
-    skills: ["React", "Next.js"],
-    experience: [5, 15],
-    employmentType: "fulltime",
-    applicationStatus: "not-applied",
-    category: "frontend",
-  },
-  {
-    id: "7",
-    company: "Software House AI",
-    positionName: "Frontend Engineer",
-    publishedAt: new Date("2025-03-14"),
-    location: ["US", "CA"],
-    skills: ["React", "Javascript", "Next.js"],
-    experience: [undefined, 15],
-    length: 1,
-    employmentType: "contract",
-    applicationStatus: "not-applied",
-    category: "frontend",
-  },
-  {
-    id: "3",
-    company: "Image Processing LLC",
-    positionName: "Frontend Developer",
-    publishedAt: new Date("2025-03-15"),
-    location: [
-      "AT",
-      "BE",
-      "BG",
-      "HR",
-      "CY",
-      "CZ",
-      "DK",
-      "EE",
-      "FI",
-      "FR",
-      "DE",
-      "GR",
-      "HU",
-      "IE",
-      "IT",
-      // "LV",
-      // "LT",
-      // "LU",
-      // "MT",
-      // "NL",
-      // "PL",
-      // "PT",
-      // "RO",
-      // "SK",
-      // "SI",
-      // "ES",
-      // "SE",
-      // "GB",
-      // "AR",
-      // "BO",
-      // "BR",
-      // "CL",
-      // "CO",
-      // "CR",
-      // "CU",
-      // "DO",
-      // "EC",
-      // "SV",
-      // "GT",
-      // "HT",
-      // "HN",
-      // "MX",
-      // "NI",
-      // "PA",
-      // "PY",
-      // "PE",
-      // "PR",
-      // "UY",
-      // "VE",
-    ],
-    skills: ["React"],
-    experience: [8, 15],
-    length: 2,
-    employmentType: "fulltime",
-    applicationStatus: "not-applied",
-    category: "frontend",
-  },
-  {
-    id: "4",
-    company: "Wizard Labs",
-    positionName: "Data Engineer (Web Scraping)",
-    publishedAt: new Date("2025-03-03"),
-    location: ["ALL"],
-    skills: ["Python", "Data Visualization"],
-    experience: [5, 8],
-    employmentType: "fulltime",
-    applicationStatus: "not-applied",
-    category: "data analyst",
-  },
-  {
-    id: "5",
-    company: "Heart Health",
-    positionName: "Senior Full Stack Engineer",
-    publishedAt: new Date("2024-10-29"),
-    location: ["US"],
-    skills: ["React", "UI Development"],
-    employmentType: "fulltime",
-    applicationStatus: "not-applied",
-    category: "fullstack",
-  },
-  {
-    id: "6",
-    company: "Jeans",
-    positionName: "Software Engineer",
-    publishedAt: new Date("2024-11-01"),
-    location: [
-      "AR",
-      "BO",
-      "BR",
-      "CL",
-      "CO",
-      "CR",
-      "CU",
-      "DO",
-      "EC",
-      "SV",
-      "GT",
-      "HT",
-      "HN",
-      "MX",
-      "NI",
-      "PA",
-      "PY",
-      "PE",
-      "PR",
-      "UY",
-      "VE",
-    ],
-    skills: ["React", "Elixir"],
-    experience: [3, 5],
-    length: 6,
-    employmentType: "contract",
-    applicationStatus: "not-applied",
-    category: "fullstack",
-  },
-];
-
-const localeDateOptions: Intl.DateTimeFormatOptions = {
-  day: "numeric",
-  month: "short",
-  year: "numeric",
-};
+import { TableHeader } from "./TableHeader/TableHeader";
 
 export function JobBoard() {
-  const rows = data.map((element) => (
+  const [sortedData, setSortedData] = useState(data);
+  const [sortBy, setSortBy] = useState<keyof JobPosition | null>(null);
+  const [reverseSortDirection, setReverseSortDirection] = useState(false);
+
+  const setSorting = (field: keyof JobPosition) => {
+    const reversed = field === sortBy ? !reverseSortDirection : false;
+    setReverseSortDirection(reversed);
+    setSortBy(field);
+    setSortedData(sortData(data, { sortBy: field, reversed }));
+  };
+
+  const rows = sortedData.map((element) => (
     <Table.Tr key={element.id}>
       <Table.Td>
         <b>{element.company}</b> - {element.positionName}
@@ -197,12 +46,18 @@ export function JobBoard() {
           Showing <b>{data.length}</b> results
         </span>
       </div>
-      <Table striped highlightOnHover verticalSpacing="md">
+      <Table stickyHeader striped highlightOnHover verticalSpacing="md">
         <Table.Thead>
           <Table.Tr>
             <Table.Th>Company - Position</Table.Th>
             <Table.Th>Category</Table.Th>
-            <Table.Th>Published At</Table.Th>
+            <TableHeader
+              sorted={sortBy === "publishedAt"}
+              reversed={reverseSortDirection}
+              onSort={() => setSorting("publishedAt")}
+            >
+              Published At
+            </TableHeader>
             <Table.Th>Location</Table.Th>
             <Table.Th>Skills</Table.Th>
             <Table.Th>Experience</Table.Th>
